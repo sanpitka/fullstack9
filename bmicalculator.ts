@@ -27,7 +27,7 @@ export const calculateBmi = (height: number, weight: number): string => {
   } else {
     return 'Normal weight';
   }
-}
+};
 
 if (require.main === module) {
   try {

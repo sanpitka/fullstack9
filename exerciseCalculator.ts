@@ -8,7 +8,7 @@ interface Result {
   ratingDescription: string;
 }
 
-const parseArgs = (args: String[]): { dailyExercises: number[]; target: number } => {
+const parseArgs = (args: string[]): { dailyExercises: number[]; target: number } => {
   if (args.length < 4) throw new Error("Not enough arguments");
 
   const dailyExercises = args.slice(2, -1).map(Number);
@@ -52,7 +52,7 @@ const calculateExercises = (dailyExercises: number[], target: number): Result =>
     rating,
     ratingDescription
   };
-}
+};
 
 try {
   const { dailyExercises, target } = parseArgs(process.argv);
