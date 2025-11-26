@@ -54,13 +54,17 @@ const calculateExercises = (dailyExercises: number[], target: number): Result =>
   };
 };
 
-try {
-  const { dailyExercises, target } = parseArgs(process.argv);
-  console.log(calculateExercises(dailyExercises, target));
-} catch (error: unknown) {
-  let errorMessage = 'Oops! ';
-  if (error instanceof Error) {
-    errorMessage += error.message;
+if (require.main === module) {
+  try {
+    const { dailyExercises, target } = parseArgs(process.argv);
+    console.log(calculateExercises(dailyExercises, target));
+  } catch (error: unknown) {
+    let errorMessage = 'Oops! ';
+    if (error instanceof Error) {
+      errorMessage += error.message;
+    }
+    console.log(errorMessage);
   }
-  console.log(errorMessage);
 }
+
+export { calculateExercises };
