@@ -4,15 +4,23 @@ import { NewEntrySchema } from '../utils';
 
 import { z } from 'zod';
 import { 
-  PatientEntry, 
+  Patient, 
   NewPatientEntry, 
-  NonSensitivePatientEntry 
+  NonSensitivePatient 
 } from '../types';
 
 const router = express.Router();
 
-router.get('/', (_req, res: Response<NonSensitivePatientEntry[]>) => {
+router.get('/', (_req, res: Response<NonSensitivePatient[]>) => {
   res.send(patientService.getNonsensitiveEntries());
+});
+
+router.get('/:id', (req: Request, res: Response<Patient | { error: string }>) => {
+  const patient = patientService.getEntries().find(p => p.id === req.params.id);
+  if (!patient) {
+    res.status(404).send({ error: 'Patient not found' });
+  }
+  res.send(patient);
 });
 
 const newPatientParser = (
@@ -43,7 +51,7 @@ const errorMiddleware = (
 
 router.post('/', newPatientParser, (
   req: Request<unknown, unknown, NewPatientEntry>, 
-  res: Response<PatientEntry>
+  res: Response<Patient>
 ) => {
   const addedEntry = patientService.addPatient(req.body);
   res.json(addedEntry);
