@@ -3,8 +3,14 @@ import { useState, useEffect } from "react";
 import { Typography, Box } from "@mui/material";
 import patientService from "../../services/patients";
 import { Patient } from "../../types";
+import { Diagnosis } from "../../types";
+import EntryDetails from "./EntryDetails";
 
-const PatientPage = () => {
+interface Props {
+  diagnoses: Diagnosis[];
+}
+
+const PatientPage = ({ diagnoses }: Props) => {
   const { id } = useParams<{ id: string }>();
   const [patient, setPatient] = useState<Patient | null>(null);
 
@@ -37,16 +43,7 @@ const PatientPage = () => {
       ) : (
         <div>
           {patient.entries.map((entry) => (
-            <Box key={entry.id} mb={3}>
-              <Typography>{entry.date} <i>{entry.description}</i></Typography>
-              {entry.diagnosisCodes && entry.diagnosisCodes.length > 0 ? (
-                <ul>
-                  {entry.diagnosisCodes.map((code) => (
-                    <li key={code}>{code}</li>
-                  ))}
-                </ul>
-              ) : null}
-            </Box>
+            <EntryDetails key={entry.id} entry={entry} diagnoses={diagnoses} />
           ))}
         </div>
       )}
