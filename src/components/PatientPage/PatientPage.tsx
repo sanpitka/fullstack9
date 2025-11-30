@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { Typography, Box } from "@mui/material";
 import patientService from "../../services/patients";
 import { Patient } from "../../types";
-import { Typography, Box } from "@mui/material";
 
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,6 +28,28 @@ const PatientPage = () => {
       <Typography>Gender: {patient.gender}</Typography>
       <Typography>SSN: {patient.ssn}</Typography>
       <Typography>Occupation: {patient.occupation}</Typography>
+
+      <Typography variant="h5" style={{ marginTop: "1em" }}>
+        Entries
+      </Typography>
+      {patient.entries.length === 0 ? (
+        <Typography>No entries available.</Typography>
+      ) : (
+        <div>
+          {patient.entries.map((entry) => (
+            <Box key={entry.id} mb={3}>
+              <Typography>{entry.date} <i>{entry.description}</i></Typography>
+              {entry.diagnosisCodes && entry.diagnosisCodes.length > 0 ? (
+                <ul>
+                  {entry.diagnosisCodes.map((code) => (
+                    <li key={code}>{code}</li>
+                  ))}
+                </ul>
+              ) : null}
+            </Box>
+          ))}
+        </div>
+      )}
     </Box>
   );
 };
