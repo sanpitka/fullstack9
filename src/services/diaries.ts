@@ -8,4 +8,9 @@ const getAll = async () => {
   return data;
 };
 
-export default { getAll };
+const create = async (newObject: Omit<Diary, 'id'>) => {
+  const { data } = await axios.post<Diary>(baseUrl, newObject);
+  return data;
+};
+
+export default { getAll, create };
