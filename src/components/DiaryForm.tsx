@@ -1,64 +1,58 @@
 import { useState } from "react";
 import { NewEntry } from "../types";
 
-const DiaryForm = ({ onSubmit }: { onSubmit: (entry: NewEntry) => Promise<void> }) => {
+const DiaryForm = ({ onSubmit }: { onSubmit: (entry: NewEntry) => void }) => {
   const [date, setDate] = useState('');
-  const [weather, setWeather] = useState('');
-  const [visibility, setVisibility] = useState('');
+  const [weather, setWeather] = useState<NewEntry['weather']>('Sunny');
+  const [visibility, setVisibility] = useState<NewEntry['visibility']>('Great');
   const [comment, setComment] = useState('');
-  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    try {
-      await onSubmit({ date, weather, visibility, comment });
-      setDate('');
-      setWeather('');
-      setVisibility('');
-      setComment('');
-    } catch (error: unknown) {
-  let errorMessage = '';
-  if (
-    typeof error === 'object' &&
-    error !== null &&
-    'response' in error &&
-    typeof (error as any).response?.data === 'string'
-  ) {
-    errorMessage = (error as any).response.data;
-  } else if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message;
-  }
-  setError(errorMessage);
-  setTimeout(() => { setError(null); }, 5000);
-}
+    onSubmit({ date, weather, visibility, comment });
+    setDate('');
+    setWeather('Sunny');
+    setVisibility('Great');
+    setComment('');
   };
 
   return (
     <div>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
       <h2>Add new entry</h2>
       <form onSubmit={handleSubmit}>
         <div>
           Date:
           <input
+            type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
           />
         </div>
         <div>
           Weather:
-          <input
+          <select
             value={weather}
-            onChange={(e) => setWeather(e.target.value)}
-          />
+            onChange={(e) => setWeather(e.target.value as NewEntry['weather'])}
+          >
+            <option value="" disabled hidden>Select...</option>
+            <option value="sunny">Sunny</option>
+            <option value="rainy">Rainy</option>
+            <option value="cloudy">Cloudy</option>
+            <option value="windy">Windy</option>
+            <option value="stormy">Stormy</option>
+          </select>
         </div>
         <div>
           Visibility:
-          <input
+          <select
             value={visibility}
-            onChange={(e) => setVisibility(e.target.value)}
-          />
+            onChange={(e) => setVisibility(e.target.value as NewEntry['visibility'])}
+          >
+            <option value="great">Great</option>
+            <option value="good">Good</option>
+            <option value="ok">Ok</option>
+            <option value="poor">Poor</option>
+          </select>
         </div>
         <div>
           Comment:

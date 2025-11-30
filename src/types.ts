@@ -1,8 +1,8 @@
 export interface Diary {
   id: number
   date: string
-  weather: string 
-  visibility: string
+  weather: 'Sunny' | 'Rainy' | 'Cloudy' | 'Windy' | 'Stormy'
+  visibility: 'Great' | 'Good' | 'Ok' | 'Poor'
   comment: string
 }
 
