@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { NewEntrySchema } from './utils';
+import { NewPatientEntrySchema } from './utils';
 
 export interface DgEntry {
   code: string;
@@ -67,6 +67,6 @@ export type Entry =
 
 export type NewEntry = Omit<Entry, 'id'>;
 
-export type NewPatientEntry = z.infer<typeof NewEntrySchema>; 
+export type NewPatientEntry = z.infer<typeof NewPatientEntrySchema>; 
 
 export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;
