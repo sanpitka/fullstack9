@@ -1,6 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 import patientService from '../services/patientService';
-import { NewEntrySchema } from '../utils';
+import { NewPatientEntrySchema } from '../utils';
+import { EntrySchema } from '../utils';
+import { NewEntry, Entry } from '../types';
 
 import { z } from 'zod';
 import { 
@@ -29,7 +31,20 @@ const newPatientParser = (
   next: NextFunction
 ) => { 
   try {
-    NewEntrySchema.parse(req.body);
+    NewPatientEntrySchema.parse(req.body);
+    next();
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+const newEntryParser = (
+  req: Request, 
+  _res: Response, 
+  next: NextFunction
+) => { 
+  try {
+    EntrySchema.parse(req.body);
     next();
   } catch (error: unknown) {
     next(error);
@@ -56,6 +71,18 @@ router.post('/', newPatientParser, (
   const addedEntry = patientService.addPatient(req.body);
   res.json(addedEntry);
 });
+
+router.post('/:id/entries', newEntryParser, (
+  req: Request<{ id: string }, unknown, NewEntry>, 
+  res: Response<Entry | { error: string }>
+) => {
+  const entry = patientService.addEntry(req.params.id, req.body);
+  if (!entry) {
+    return res.status(404).send({ error: 'Patient not found' });
+  }
+  return res.send(entry);
+});
+
 
 router.use(errorMiddleware);
 
