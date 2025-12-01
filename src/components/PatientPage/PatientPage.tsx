@@ -2,8 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Typography, Box } from "@mui/material";
 import patientService from "../../services/patients";
-import { Patient } from "../../types";
-import { Diagnosis } from "../../types";
+import { Patient, Diagnosis } from "../../types";
 import EntryDetails from "./EntryDetails";
 
 interface Props {
