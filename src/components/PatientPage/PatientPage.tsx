@@ -69,6 +69,7 @@ const PatientPage = ({ diagnoses }: Props) => {
 
       <AddEntryModal
         modalOpen={modalOpen}
+        diagnoses={diagnoses}
         onSubmit={submitNewEntry}
         error={error}
         onClose={closeModal}
@@ -84,7 +85,7 @@ const PatientPage = ({ diagnoses }: Props) => {
         <Typography>No entries available.</Typography>
       ) : (
         <div>
-          {patient.entries.map((entry) => (
+          {patient.entries.slice().reverse().map((entry) => (
             <EntryDetails key={entry.id} entry={entry} diagnoses={diagnoses} />
           ))}
         </div>
